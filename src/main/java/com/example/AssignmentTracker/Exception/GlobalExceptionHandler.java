@@ -1,10 +1,7 @@
 package com.example.AssignmentTracker.Exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,8 +10,8 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(studentNotFoundException.class)
-        public ResponseEntity<?> handleNotFoundException(studentNotFoundException exception) {
+    @ExceptionHandler(StudentNotFoundException.class)
+        public ResponseEntity<?> handleNotFoundException(StudentNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, exception.getMessage(),
                 LocalDateTime.now()));
     }
@@ -27,4 +24,19 @@ public class GlobalExceptionHandler {
 
 
     }
-}
+
+    @ExceptionHandler(AssignmentSubmissionNotFoundException.class)
+    public ResponseEntity<?> handleSubmissionNotFoundException(AssignmentSubmissionNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, exception.getMessage(),
+                LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(FileStorageException.class)
+    public ResponseEntity<?> handleFileStorageException(FileStorageException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(500, ex.getMessage(), LocalDateTime.now()));
+    }
+
+
+
+    }
+

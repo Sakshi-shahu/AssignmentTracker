@@ -1,7 +1,7 @@
 package com.example.AssignmentTracker.service;
 
 
-import com.example.AssignmentTracker.Exception.studentNotFoundException;
+import com.example.AssignmentTracker.Exception.StudentNotFoundException;
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class StudentService {
 
   public Student getStudent(Long id){
         return studentRepository.findById(id).orElseThrow(()->
-                new studentNotFoundException("student not found with this id"+id));
+                new StudentNotFoundException("student not found with this id"+id));
 
   }
 
@@ -35,7 +35,7 @@ public class StudentService {
 
     public Student updateStudent(Student student,Long id){
         Student exsistStudent=studentRepository.findById(id).orElseThrow(()->
-                new studentNotFoundException("student not found with this id"+id));
+                new StudentNotFoundException("student not found with this id"+id));
 
         exsistStudent.setName(student.getName());
         exsistStudent.setEmail(student.getEmail());
@@ -47,7 +47,7 @@ public class StudentService {
 
     public void deleteStudent(Long id){
         Student student=studentRepository.findById(id).orElseThrow(()->
-                new studentNotFoundException("student not found with this id"+id));
+                new StudentNotFoundException("student not found with this id"+id));
        studentRepository.delete(student);
     }
 
