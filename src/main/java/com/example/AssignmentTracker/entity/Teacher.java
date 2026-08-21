@@ -14,8 +14,8 @@ public class Teacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-    @ManyToOne(fetch = FetchType.LAZY)
-    Student studentList;
+    @OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL)
+    private List<Student> studentList;
 
     String subject;
 

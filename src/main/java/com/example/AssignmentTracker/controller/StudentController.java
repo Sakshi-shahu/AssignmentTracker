@@ -3,6 +3,7 @@ package com.example.AssignmentTracker.controller;
 
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.service.StudentService;
+import jakarta.validation.Path;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,9 @@ public class StudentController {
     private final  StudentService studentService;
 
 
-    @PostMapping("/addstudent")
-    public ResponseEntity<Student> addStudent(@Valid @RequestBody Student student){
-     Student savedStudent =studentService.addStudent(student);
+    @PostMapping("/addstudent/{id}")
+    public ResponseEntity<Student> addStudent( @RequestBody Student student, @PathVariable Long id){
+     Student savedStudent =studentService.addStudent(student, id);
      return  ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
 
     }

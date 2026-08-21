@@ -1,10 +1,9 @@
 package com.example.AssignmentTracker.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.ToString;
@@ -23,4 +22,8 @@ public class Student {
     String email;
     @NotBlank
     String course;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    @JsonBackReference
+    private  Teacher teacher;
 }
