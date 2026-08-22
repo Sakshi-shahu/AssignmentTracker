@@ -291,4 +291,27 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
+
+
+    @Override
+    public void assignAssignmentToStudent(Long assignmentId, Long studentId) {
+
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() ->
+                        new AssignmentNotFoundException(
+                                "Assignment not found with id: " + assignmentId));
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student not found with id: " + studentId));
+
+        if (!assignment.getStudents().contains(student)) {
+            assignment.getStudents().add(student);
+        }
+
+        assignmentRepository.save(assignment);
+    }
+
+
 }

@@ -59,4 +59,8 @@ public interface AdminService {
     List<AssignmentSubmission> getAllSubmissions();
 
     List<AssignmentSubmission> getSubmissionsByAssignment(Long assignmentId);
+
+
+
+    void assignAssignmentToStudent(Long assignmentId, Long studentId);
 }

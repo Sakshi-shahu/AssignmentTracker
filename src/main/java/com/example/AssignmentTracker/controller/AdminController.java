@@ -221,4 +221,19 @@ public class AdminController {
         return ResponseEntity.ok(
                 adminService.getSubmissionsByAssignment(assignmentId));
     }
+
+
+
+
+    @PostMapping("/assignments/{assignmentId}/students/{studentId}")
+    public ResponseEntity<Void> assignAssignmentToStudent(
+            @PathVariable Long assignmentId,
+            @PathVariable Long studentId) {
+
+        adminService.assignAssignmentToStudent(
+                assignmentId,
+                studentId);
+
+        return ResponseEntity.ok().build();
+    }
 }
