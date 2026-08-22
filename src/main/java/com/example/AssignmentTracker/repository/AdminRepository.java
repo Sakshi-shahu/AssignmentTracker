@@ -1,4 +1,6 @@
 package com.example.AssignmentTracker.repository;
 
-public interface AdminRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AdminRepository extends JpaRepository {
 }
