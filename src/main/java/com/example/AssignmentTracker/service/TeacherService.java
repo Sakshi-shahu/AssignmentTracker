@@ -1,9 +1,12 @@
 package com.example.AssignmentTracker.service;
 
+import com.example.AssignmentTracker.Exception.TeacherNotFoundException;
+import com.example.AssignmentTracker.dto.TeacherResponseDto;
 import com.example.AssignmentTracker.entity.Teacher;
 import com.example.AssignmentTracker.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +17,11 @@ import java.util.List;
 public class TeacherService {
 
     private  final TeacherRepository teacherRepository;
+private  final ModelMapper mapper;
 
-
-    public  Teacher addTeacher(Teacher teacher){
-      return   teacherRepository.save(teacher);
+    public  Teacher addTeacher(TeacherResponseDto responseDto){
+        Teacher teacher = mapper.map(responseDto, Teacher.class);
+        return   teacherRepository.save(teacher);
     }
 
 
@@ -33,10 +37,9 @@ public class TeacherService {
 
 
 
-    public  Teacher updateTeacher(Long id, Teacher teacher ){
-        Teacher t1 = teacherRepository.findById(id).get();
-        t1.setName(teacher.getName());
-        t1.setSubject(teacher.getSubject());
+    public  Teacher updateTeacher(Long id, TeacherResponseDto teacher ){
+        Teacher t1 = teacherRepository.findById(id).orElseThrow(()-> new TeacherNotFoundException("teacher not found with id :  "+ id));
+        mapper.map(teacher, t1);
       return    teacherRepository.save(t1);
     }
 

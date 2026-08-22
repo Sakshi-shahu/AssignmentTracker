@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.controller;
 
+import com.example.AssignmentTracker.dto.TeacherResponseDto;
 import com.example.AssignmentTracker.entity.Teacher;
 import com.example.AssignmentTracker.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class TeacherController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher){
-       return ResponseEntity.status(HttpStatus.CREATED).body(teacherService.addTeacher(teacher));
+    public ResponseEntity<Teacher> createTeacher(@RequestBody TeacherResponseDto  teacherResponseDto){
+       return ResponseEntity.status(HttpStatus.CREATED).body(teacherService.addTeacher(teacherResponseDto));
     }
 
 
@@ -43,7 +44,7 @@ public class TeacherController {
 
 
     @PutMapping("/update/{id}")
-    public  ResponseEntity<Teacher> updateTeacher( @PathVariable long id,  @RequestBody Teacher teacher ){
+    public  ResponseEntity<Teacher> updateTeacher( @PathVariable long id,  @RequestBody TeacherResponseDto teacher ){
         return  ResponseEntity.ok(teacherService.updateTeacher(id, teacher));
     }
 
