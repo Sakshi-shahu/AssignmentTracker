@@ -10,13 +10,23 @@ import java.util.List;
 @Data
 @ToString
 public class Teacher {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String name;
-    @ManyToOne(fetch = FetchType.LAZY)
-    Student studentList;
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private List<Student> studentList;
 
     String subject;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")
+    private Admin createdByAdmin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "super_admin_id")
+    private SuperAdmin createdBySuperAdmin;
 }

@@ -11,14 +11,13 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @ToString
-@Table(name = "assignment_submission")
 public class AssignmentSubmission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @NotNull(message = "Assignment is required")
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;

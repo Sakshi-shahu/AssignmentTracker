@@ -10,7 +10,6 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@Table(name = "admin")
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
