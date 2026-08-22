@@ -10,13 +10,23 @@ import java.util.List;
 @Data
 @ToString
 public class Teacher {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String name;
-    @OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String subject;
+
+    // Teacher is created by a SuperAdmin
+    @ManyToOne
+    @JoinColumn(name = "super_admin_id")
+    private SuperAdmin createdBySuperAdmin;
+
+    // Teacher has many students
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<Student> studentList;
-
-    String subject;
-
 }

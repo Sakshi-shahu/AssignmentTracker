@@ -1,6 +1,5 @@
 package com.example.AssignmentTracker.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,12 +31,11 @@ public class SuperAdmin {
 
     private boolean active = true;
 
+    // SuperAdmin creates Admins
     @OneToMany(mappedBy = "createdBy")
     private List<Admin> admins;
 
+    // SuperAdmin creates Teachers
     @OneToMany(mappedBy = "createdBySuperAdmin")
     private List<Teacher> teachers;
-
-    @OneToMany(mappedBy = "createdBySuperAdmin")
-    private List<Student> students;
 }
