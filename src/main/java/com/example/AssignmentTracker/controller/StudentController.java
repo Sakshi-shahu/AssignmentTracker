@@ -1,6 +1,7 @@
 package com.example.AssignmentTracker.controller;
 
 
+import com.example.AssignmentTracker.dto.StudentResponseDto;
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.service.StudentService;
 import jakarta.validation.Path;
@@ -21,7 +22,7 @@ public class StudentController {
 
 
     @PostMapping("/addstudent/{id}")
-    public ResponseEntity<Student> addStudent( @RequestBody Student student, @PathVariable Long id){
+    public ResponseEntity<Student> addStudent(@RequestBody StudentResponseDto student, @PathVariable Long id){
      Student savedStudent =studentService.addStudent(student, id);
      return  ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
 
@@ -42,7 +43,7 @@ public class StudentController {
 
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Student> updateStudent(@Valid @RequestBody Student student, @PathVariable  Long id){
+    public ResponseEntity<Student> updateStudent(@Valid @RequestBody StudentResponseDto student, @PathVariable  Long id){
         Student updateStudent=studentService.updateStudent(student,id);
         return  ResponseEntity.ok(updateStudent);
     }

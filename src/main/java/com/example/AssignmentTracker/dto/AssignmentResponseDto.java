@@ -1,4 +1,13 @@
 package com.example.AssignmentTracker.dto;
 
-public record AssignmentResponseDto() {
+import com.example.AssignmentTracker.entity.Teacher;
+
+import java.time.LocalDate;
+
+public record AssignmentResponseDto(String title,
+                                    String description,
+                                    LocalDate assignedDate,
+                LocalDate dueDate,
+                Teacher teacher
+) {
 }

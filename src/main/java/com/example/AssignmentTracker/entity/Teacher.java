@@ -12,11 +12,21 @@ import java.util.List;
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String name;
+    private  Long id;
+    private   String name;
     @OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL)
     private List<Student> studentList;
 
-    String subject;
+    private    String subject;
+
+// done by kashish
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")
+    private Admin createdByAdmin;
+
+//done by kashish
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "super_admin_id")
+    private SuperAdmin createdBySuperAdmin;
 
 }

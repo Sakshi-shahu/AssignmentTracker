@@ -2,12 +2,16 @@ package com.example.AssignmentTracker.service;
 
 
 import com.example.AssignmentTracker.Exception.StudentNotFoundException;
+import com.example.AssignmentTracker.config.MapperConfig;
+import com.example.AssignmentTracker.dto.StudentResponseDto;
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.entity.Teacher;
 import com.example.AssignmentTracker.repository.StudentRepository;
 import com.example.AssignmentTracker.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import java.util.List;
 
@@ -17,17 +21,18 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 private  final TeacherRepository teacherRepository;
+private  final ModelMapper mapper;
 
-    public Student addStudent(Student student, Long t_id){
+    public Student addStudent(StudentResponseDto student, Long t_id){
         Teacher teacher = teacherRepository.findById(t_id)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "Teacher not found with id: " + t_id
                         ));
+          Student st=    mapper.map(student, Student.class);
+        st.setTeacher(teacher);
 
-        student.setTeacher(teacher);
-
-        return studentRepository.save(student);
+        return studentRepository.save(st);
 
     }
 
@@ -43,13 +48,11 @@ private  final TeacherRepository teacherRepository;
 
     }
 
-    public Student updateStudent(Student student,Long id){
+    public Student updateStudent(StudentResponseDto student,Long id){
         Student exsistStudent=studentRepository.findById(id).orElseThrow(()->
                 new StudentNotFoundException("student not found with this id"+id));
+mapper.map(student, exsistStudent);
 
-        exsistStudent.setName(student.getName());
-        exsistStudent.setEmail(student.getEmail());
-        exsistStudent.setCourse(student.getCourse());
 
         return studentRepository.save(exsistStudent);
     }

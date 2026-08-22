@@ -14,16 +14,28 @@ import lombok.ToString;
 public class Student {
     @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private   Long id;
     @NotBlank
-    String name;
+    private String name;
     @NotBlank
     @Email
-    String email;
+    private  String email;
     @NotBlank
-    String course;
+    private   String course;
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     @JsonBackReference
     private  Teacher teacher;
+
+
+    // done by kashish
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")
+    private Admin createdByAdmin;
+
+
+    // done by kashish
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "super_admin_id")
+    private SuperAdmin createdBySuperAdmin;
 }

@@ -1,4 +1,8 @@
 package com.example.AssignmentTracker.dto;
 
-public record StudentResponseDto() {
+import com.example.AssignmentTracker.entity.Teacher;
+
+public record StudentResponseDto(String name, String email,
+                                 String course,
+                                 Teacher teacher) {
 }
