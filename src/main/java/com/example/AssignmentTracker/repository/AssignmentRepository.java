@@ -18,6 +18,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
     // Get a specific assignment for a student
     Optional<Assignment> findByIdAndStudents_Id(Long assignmentId, Long studentId);
 
+    java.util.List<Assignment> findByTeacherId(Long teacherId);
 
 
 
