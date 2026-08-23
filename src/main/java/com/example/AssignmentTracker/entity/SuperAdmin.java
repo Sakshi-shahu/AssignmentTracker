@@ -36,6 +36,6 @@ public class SuperAdmin {
     private List<Admin> admins;
 
     // SuperAdmin creates Teachers
-    @OneToMany(mappedBy = "createdBySuperAdmin")
-    private List<Teacher> teachers;
+//    @OneToMany(mappedBy = "createdBySuperAdmin")
+//    private List<Teacher> teachers;
 }

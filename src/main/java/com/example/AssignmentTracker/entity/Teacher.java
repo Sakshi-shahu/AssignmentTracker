@@ -21,7 +21,11 @@ public class Teacher {
     String subject;
 
     // SuperAdmin who created this teacher
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "super_admin_id")
+//    SuperAdmin createdBySuperAdmin;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "super_admin_id")
-    SuperAdmin createdBySuperAdmin;
+    @JoinColumn(name = "admin_id")
+    private Admin createdByAdmin;
 }
