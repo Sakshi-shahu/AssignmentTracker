@@ -29,21 +29,28 @@ public class StudentController {
         Student student = studentService.getStudent(studentId);
         return ResponseEntity.ok(student);
     }
+//done by nikhil
+    @GetMapping("profiless/{studentId}")
+    public ResponseEntity<List<Student>> getAllStudent() {
+        List<Student> student = studentService.getAllStudent();
+        return ResponseEntity.ok(student);
+    }
+
 
 
     // 2. View assignments assigned to student
-    @GetMapping("/{studentId}/assignments")
-    public ResponseEntity<List<Assignment>> getAssignedAssignments(@PathVariable Long studentId) {
-
-        List<Assignment> assignments = assignmentService.getAssignments(studentId);
+    @GetMapping("assignments/{course}")
+    public ResponseEntity<List<Assignment>> getAssignedAssignments(@PathVariable String course) {
+        List<Assignment> assignments = assignmentService.getAssignmentsByCourse(course);
         return ResponseEntity.ok(assignments);
     }
 
 
+//use by nhikhil
     // 3. View assignment details
-    @GetMapping("/assignments/{assignmentId}")
-    public ResponseEntity<Assignment> getAssignmentDetails(@PathVariable Long assignmentId) {
-        Assignment assignment = assignmentService.getAssignment(assignmentId);
+    @GetMapping("assignments/details")
+    public ResponseEntity<List<Assignment>> getAssignmentDetails() {
+        List<Assignment> assignment = assignmentService.getAssignmentAll();
         return ResponseEntity.ok(assignment);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -40,18 +41,21 @@ public class Student {
 
 
     // Student created by Admin
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
     private Admin createdByAdmin;
 
 
     // Student created by Super Admin
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "super_admin_id")
     private SuperAdmin createdBySuperAdmin;
 
 
     // Student assigned to Teacher
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;

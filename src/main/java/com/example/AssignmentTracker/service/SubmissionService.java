@@ -1,10 +1,8 @@
 package com.example.AssignmentTracker.service;
 
+import com.example.AssignmentTracker.Dto.SubmissionStatusResponse;
 import com.example.AssignmentTracker.Exception.*;
-import com.example.AssignmentTracker.entity.Assignment;
-import com.example.AssignmentTracker.entity.AssignmentSubmission;
-import com.example.AssignmentTracker.entity.Student;
-import com.example.AssignmentTracker.entity.SubmissionStatus;
+import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.AssignmentRepository;
 import com.example.AssignmentTracker.repository.StudentRepository;
 import com.example.AssignmentTracker.repository.SubmissionRepository;
@@ -17,7 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,15 +28,12 @@ public class SubmissionService {
     private final StudentRepository studentRepository;
 
 
-
-
     public AssignmentSubmission assignmentSubmission(AssignmentSubmission submission, Long assignmentId, Long studentId, MultipartFile file) {
 
         Assignment assignment = assignmentRepository.findById(assignmentId)
-                        .orElseThrow(() -> new AssignmentNotFoundException("Assignment not found with id: " + assignmentId));
-
+                .orElseThrow(() -> new AssignmentNotFoundException("Assignment not found with id: " + assignmentId));
         Student student = studentRepository.findById(studentId)
-                        .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + studentId));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + studentId));
 
 
         // File check
@@ -44,13 +41,11 @@ public class SubmissionService {
             throw new FileRequiredException("Please upload a file");
         }
 
-
         // Deadline check
         LocalDateTime submissionTime = LocalDateTime.now();
-
         if (submissionTime.toLocalDate().isAfter(assignment.getDueDate())) {
-
-            throw new SubmissionDeadlineException("Submission deadline has passed");}
+            throw new SubmissionDeadlineException("Submission deadline has passed");
+        }
 
 
         // Save file
@@ -84,51 +79,30 @@ public class SubmissionService {
     }
 
 
-
-
-    public AssignmentSubmission updateStudentSubmission(
-            Long submissionId,
-            MultipartFile file) {
-
-
+    public AssignmentSubmission updateStudentSubmission(Long submissionId,MultipartFile file) {
         AssignmentSubmission submission = submissionRepository.findById(submissionId)
-                        .orElseThrow(() -> new AssignmentSubmissionNotFoundException("Submission not found with id: " + submissionId));
-
-
+                .orElseThrow(() -> new AssignmentSubmissionNotFoundException("Submission not found with id: " + submissionId));
         // Check file
         if (file == null || file.isEmpty()) {
             throw new FileRequiredException("Please upload a file");
         }
-
         Assignment assignment = submission.getAssignment();
         LocalDateTime currentTime = LocalDateTime.now();
         if (currentTime.toLocalDate().isAfter(assignment.getDueDate())) {
-
             throw new SubmissionDeadlineException("Cannot update submission after due date");
         }
 
         try {
             String uploadDirectory = "uploads/";
             Path directory = Paths.get(uploadDirectory);
-
-
             if (!Files.exists(directory)) {
-                Files.createDirectories(directory);
-            }
-
-
+                Files.createDirectories(directory);}
             String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-
-
             Path filePath = directory.resolve(filename);
-
-
-            Files.write(filePath, file.getBytes()
-            );
+            Files.write(filePath, file.getBytes());
 
 
             // Replace old file path
-
             submission.setSubmissionFile(filePath.toString());
             submission.setSubmissionDate(currentTime);
             submission.setStatus(SubmissionStatus.SUBMITTED);
@@ -143,8 +117,6 @@ public class SubmissionService {
     }
 
 
-
-
     public AssignmentSubmission getSubmission(Long id) {
 
         return submissionRepository.findById(id).orElseThrow(() ->
@@ -152,18 +124,12 @@ public class SubmissionService {
     }
 
 
-
-
     public List<AssignmentSubmission> getMySubmissions(Long studentId) {
         return submissionRepository.findByStudentId(studentId);
     }
-
-
-
-    public List<AssignmentSubmission> getAllSubmission() {
+    public List<AssignmentSubmission> getAllSubmissions() {
         return submissionRepository.findAll();
     }
-
 
 
 
@@ -181,14 +147,8 @@ public class SubmissionService {
 
 
     public AssignmentSubmission update(AssignmentSubmission assignmentSubmission, Long id) {
-
-
         AssignmentSubmission submission = submissionRepository.findById(id)
-                        .orElseThrow(() -> new AssignmentSubmissionNotFoundException("Submission not found with id: " + id));
-
-
-        // Trainer updates these
-
+                .orElseThrow(() -> new AssignmentSubmissionNotFoundException("Submission not found with id: " + id));
         submission.setStatus(assignmentSubmission.getStatus());
         submission.setMarks(assignmentSubmission.getMarks());
         submission.setFeedback(assignmentSubmission.getFeedback());
@@ -196,12 +156,8 @@ public class SubmissionService {
         return submissionRepository.save(submission);
     }
 
-
-
-
-    public AssignmentSubmission getStudentAssignmentSubmission(Long assignmentId, Long studentId) {
-
-        return submissionRepository.findByAssignmentIdAndStudentId(assignmentId, studentId)
-                .orElseThrow(() -> new AssignmentSubmissionNotFoundException("Submission not found"));
+    public Optional<AssignmentSubmission> getSubmission(Long studentId, Long assignmentId) {
+        return submissionRepository.findByAssignment_IdAndStudent_Id(assignmentId, studentId);
     }
+
 }

@@ -25,16 +25,16 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(AssignmentSubmissionNotFoundException.class)
-    public ResponseEntity<?> handleSubmissionNotFoundException(AssignmentSubmissionNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, exception.getMessage(),
-                LocalDateTime.now()));
-    }
-
-    @ExceptionHandler(FileStorageException.class)
-    public ResponseEntity<?> handleFileStorageException(FileStorageException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(500, ex.getMessage(), LocalDateTime.now()));
-    }
+//    @ExceptionHandler(AssignmentSubmissionNotFoundException.class)
+//    public ResponseEntity<?> handleSubmissionNotFoundException(AssignmentSubmissionNotFoundException exception) {
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(404, exception.getMessage(),
+//                LocalDateTime.now()));
+//    }
+//
+//    @ExceptionHandler(FileStorageException.class)
+//    public ResponseEntity<?> handleFileStorageException(FileStorageException ex) {
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(500, ex.getMessage(), LocalDateTime.now()));
+//    }
 
 
 
