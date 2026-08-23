@@ -6,6 +6,7 @@ import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.AssignmentRepository;
 import com.example.AssignmentTracker.repository.StudentRepository;
 import com.example.AssignmentTracker.repository.SubmissionRepository;
+import com.example.AssignmentTracker.service.IdempotencyService;
 import com.example.AssignmentTracker.service.StudentAssignmentService;
 import com.example.AssignmentTracker.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +28,15 @@ public class SubmissionController {
 
     private final SubmissionService submissionService;
     private final StudentAssignmentService assignmentService;
+    private final IdempotencyService idempotencyService;
 
 
-    //  Student submits assignment
     @PostMapping(value = "/submit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AssignmentSubmission> submitAssignment(
             @RequestPart("submission") String submissionJson,
             @RequestParam("assignment_id") Long assignmentId,
             @RequestParam("student_id") Long studentId,
             @RequestPart("file") MultipartFile file) throws JsonProcessingException {
-
         ObjectMapper objectMapper = new ObjectMapper();
         AssignmentSubmission submission = objectMapper.readValue(submissionJson, AssignmentSubmission.class);
         AssignmentSubmission savedSubmission = submissionService.assignmentSubmission(submission, assignmentId, studentId, file);
@@ -44,7 +44,9 @@ public class SubmissionController {
     }
 
 
-    // 2. Student updates submission
+
+
+
     @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AssignmentSubmission>
     updateSubmission(@PathVariable Long id, @RequestPart("file") MultipartFile file) {
@@ -54,7 +56,6 @@ public class SubmissionController {
 
 
 
-    // 4. Student views marks + feedback
     @GetMapping("/{id}/result")
     public ResponseEntity<AssignmentSubmission> getResult(@PathVariable Long id) {
         AssignmentSubmission submission = submissionService.getSubmission(id);
@@ -121,7 +122,6 @@ public class SubmissionController {
             response.setStatus(submission.getStatus().name());
             responseList.add(response);
         }
-
         return ResponseEntity.ok(responseList);
     }
 

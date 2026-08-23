@@ -30,12 +30,10 @@ public class StudentService {
     }
 
 
-
   public Student getStudent(Long id){
         return studentRepository.findById(id).orElseThrow(()->
-                new StudentNotFoundException("student not found with this id"+id));
+                new StudentNotFoundException("student not found with this id"+id));}
 
-  }
 
   public List<Student> getAllStudent(){
     return studentRepository.findAll();

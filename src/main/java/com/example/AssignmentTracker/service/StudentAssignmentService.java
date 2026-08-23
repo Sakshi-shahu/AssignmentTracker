@@ -30,8 +30,6 @@ public class StudentAssignmentService {
         return assignmentRepository.findAll();
     }
 
-
-
     public Assignment assignAssignment(Long assignmentId) {
 
         Assignment assignment = assignmentRepository.findById(assignmentId)
@@ -42,12 +40,8 @@ public class StudentAssignmentService {
 
         for (Student student : students) {
 
-            // Assignment student ko assign karo
             assignment.getStudents().add(student);
-
-            // Student ke liye PENDING submission create karo
             AssignmentSubmission submission = new AssignmentSubmission();
-
             submission.setAssignment(assignment);
             submission.setStudent(student);
             submission.setStatus(SubmissionStatus.PENDING);
@@ -58,7 +52,6 @@ public class StudentAssignmentService {
         }
 
         assignmentRepository.save(assignment);
-
         return assignment;
     }
 

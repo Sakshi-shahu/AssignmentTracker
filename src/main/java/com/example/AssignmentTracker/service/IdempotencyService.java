@@ -22,7 +22,4 @@ public class IdempotencyService {
     public Long get(String key){
         return proceedRequests.get(key);
     }
-
-
-
 }

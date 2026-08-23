@@ -35,43 +35,30 @@ public class SubmissionService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + studentId));
 
-
-        // File check
         if (file == null || file.isEmpty()) {
             throw new FileRequiredException("Please upload a file");
         }
-
-        // Deadline check
         LocalDateTime submissionTime = LocalDateTime.now();
         if (submissionTime.toLocalDate().isAfter(assignment.getDueDate())) {
             throw new SubmissionDeadlineException("Submission deadline has passed");
         }
 
 
-        // Save file
         try {
 
             String uploadDirectory = "uploads/";
-
             Path directory = Paths.get(uploadDirectory);
-
             if (!Files.exists(directory)) {
-                Files.createDirectories(directory);
-            }
+                Files.createDirectories(directory);}
             String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
             Path filePath = directory.resolve(filename);
             Files.write(filePath, file.getBytes());
-
-
-            // Set submission details
-
             submission.setSubmissionFile(filePath.toString());
             submission.setAssignment(assignment);
             submission.setStudent(student);
             submission.setSubmissionDate(submissionTime);
             submission.setStatus(SubmissionStatus.SUBMITTED);
             return submissionRepository.save(submission);
-
 
         } catch (IOException e) {
             throw new FileStorageException("Failed to store uploaded file", e);
@@ -82,7 +69,6 @@ public class SubmissionService {
     public AssignmentSubmission updateStudentSubmission(Long submissionId,MultipartFile file) {
         AssignmentSubmission submission = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new AssignmentSubmissionNotFoundException("Submission not found with id: " + submissionId));
-        // Check file
         if (file == null || file.isEmpty()) {
             throw new FileRequiredException("Please upload a file");
         }
@@ -100,25 +86,18 @@ public class SubmissionService {
             String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
             Path filePath = directory.resolve(filename);
             Files.write(filePath, file.getBytes());
-
-
-            // Replace old file path
             submission.setSubmissionFile(filePath.toString());
             submission.setSubmissionDate(currentTime);
             submission.setStatus(SubmissionStatus.SUBMITTED);
-
             return submissionRepository.save(submission);
 
-
         } catch (IOException e) {
-
             throw new FileStorageException("Failed to update uploaded file", e);
         }
     }
 
 
     public AssignmentSubmission getSubmission(Long id) {
-
         return submissionRepository.findById(id).orElseThrow(() ->
                 new AssignmentSubmissionNotFoundException("Submission not found with id: " + id));
     }
@@ -145,14 +124,12 @@ public class SubmissionService {
         submissionRepository.deleteAll();
     }
 
-
     public AssignmentSubmission update(AssignmentSubmission assignmentSubmission, Long id) {
         AssignmentSubmission submission = submissionRepository.findById(id)
                 .orElseThrow(() -> new AssignmentSubmissionNotFoundException("Submission not found with id: " + id));
         submission.setStatus(assignmentSubmission.getStatus());
         submission.setMarks(assignmentSubmission.getMarks());
         submission.setFeedback(assignmentSubmission.getFeedback());
-
         return submissionRepository.save(submission);
     }
 

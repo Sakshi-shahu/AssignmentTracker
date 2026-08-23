@@ -23,7 +23,6 @@ public class StudentController {
     private final StudentAssignmentService assignmentService;
 
 
-    // 1. View own profile
     @GetMapping("profile/{studentId}")
     public ResponseEntity<Student> getProfile(@PathVariable Long studentId) {
         Student student = studentService.getStudent(studentId);
@@ -38,7 +37,6 @@ public class StudentController {
 
 
 
-    // 2. View assignments assigned to student
     @GetMapping("assignments/{course}")
     public ResponseEntity<List<Assignment>> getAssignedAssignments(@PathVariable String course) {
         List<Assignment> assignments = assignmentService.getAssignmentsByCourse(course);
@@ -47,7 +45,6 @@ public class StudentController {
 
 
 //use by nhikhil
-    // 3. View assignment details
     @GetMapping("assignments/details")
     public ResponseEntity<List<Assignment>> getAssignmentDetails() {
         List<Assignment> assignment = assignmentService.getAssignmentAll();
