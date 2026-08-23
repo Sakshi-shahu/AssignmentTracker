@@ -1,37 +1,62 @@
 package com.example.AssignmentTracker.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
+@Builder
 @Entity
-@Table(name = "student")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Student {
 
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
- @NotBlank
- @Column(nullable = false)
- private String name;
+    private String name;
 
- @NotBlank
- @Email
- @Column(nullable = false, unique = true)
- private String email;
+    private String email;
 
- @NotBlank
- @Column(nullable = false)
- private String course;
+    private String phone;
 
- @ManyToOne
- @JoinColumn(name = "teacher_id")
- @JsonBackReference
- private Teacher teacher;
+    private String course;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private boolean active = true;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+
+    // Student created by Admin
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")
+    private Admin createdByAdmin;
+
+
+    // Student created by Super Admin
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "super_admin_id")
+    private SuperAdmin createdBySuperAdmin;
+
+
+    // Student assigned to Teacher
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 }

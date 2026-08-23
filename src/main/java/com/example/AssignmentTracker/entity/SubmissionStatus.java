@@ -4,6 +4,6 @@ public enum SubmissionStatus {
 
     SUBMITTED,
     GRADED,
-    REJECTED
-    ,PENDING
+    REJECTED,
+    PENDING
 }

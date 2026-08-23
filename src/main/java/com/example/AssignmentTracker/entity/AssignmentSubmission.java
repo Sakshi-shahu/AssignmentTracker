@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,18 +12,22 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @ToString
-@Table(name = "assignment_submission")
 public class AssignmentSubmission {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @NotNull(message = "Assignment is required")
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
+
+    @JsonIgnore
     @ManyToOne
     @NotNull(message = "Student is required")
     @JoinColumn(name = "student_id")

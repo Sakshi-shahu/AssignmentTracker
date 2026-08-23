@@ -11,7 +11,6 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@Table(name = "super_admin")
 @Data
 @ToString
 @NoArgsConstructor
@@ -28,8 +27,6 @@ public class SuperAdmin {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
 
     private boolean active = true;
 

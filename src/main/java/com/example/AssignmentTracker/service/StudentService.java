@@ -1,11 +1,11 @@
 package com.example.AssignmentTracker.service;
 
 
+import com.example.AssignmentTracker.Dto.RequestDto;
 import com.example.AssignmentTracker.Exception.StudentNotFoundException;
+import com.example.AssignmentTracker.entity.Role;
 import com.example.AssignmentTracker.entity.Student;
-import com.example.AssignmentTracker.entity.Teacher;
 import com.example.AssignmentTracker.repository.StudentRepository;
-import com.example.AssignmentTracker.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,27 +16,24 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
-private  final TeacherRepository teacherRepository;
 
-    public Student addStudent(Student student, Long t_id){
-        Teacher teacher = teacherRepository.findById(t_id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Teacher not found with id: " + t_id
-                        ));
 
-        student.setTeacher(teacher);
-
-        return studentRepository.save(student);
+    public Student addStudent(RequestDto requestDto ){
+        Student student=Student.builder().name(requestDto.getName())
+                .email(requestDto.getEmail())
+                .phone(requestDto.getPhone())
+                .course(requestDto.getCourse())
+                .role(Role.STUDENT)
+                .build();
+        return  studentRepository.save(student);
 
     }
 
 
   public Student getStudent(Long id){
         return studentRepository.findById(id).orElseThrow(()->
-                new StudentNotFoundException("student not found with this id"+id));
+                new StudentNotFoundException("student not found with this id"+id));}
 
-  }
 
   public List<Student> getAllStudent(){
     return studentRepository.findAll();
