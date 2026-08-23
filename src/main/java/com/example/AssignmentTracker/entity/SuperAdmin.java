@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,8 @@ public class SuperAdmin {
 
     // SuperAdmin creates Admins
     @OneToMany(mappedBy = "createdBy")
-    @JsonManagedReference
+    //@JsonManagedReference
+    @JsonIgnoreProperties("createdBy")
     private List<Admin> admins;
 
     // SuperAdmin creates Teachers

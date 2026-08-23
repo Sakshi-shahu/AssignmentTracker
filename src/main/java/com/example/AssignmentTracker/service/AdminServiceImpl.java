@@ -26,69 +26,80 @@ public class AdminServiceImpl implements AdminService {
 
     // ================= ADMIN =================
 
-    @Override
-    public Admin createAdmin(AdminRequest request) {
-
-        Admin admin = new Admin();
-
-        admin.setName(request.getName());
-        admin.setEmail(request.getEmail());
-        admin.setPassword(request.getPassword());
-        admin.setActive(true);
-
-        return adminRepository.save(admin);
-    }
-
-
-    @Override
-    public List<Admin> getAllAdmins() {
-        return adminRepository.findAll();
-    }
-
-
-    @Override
-    public Admin getAdminById(Long id) {
-
-        return adminRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Admin not found with id: " + id));
-    }
-
-
-    @Override
-    public Admin updateAdmin(Long id, AdminRequest request) {
-
-        Admin admin = adminRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Admin not found with id: " + id));
-
-        admin.setName(request.getName());
-        admin.setEmail(request.getEmail());
-        admin.setPassword(request.getPassword());
-
-        return adminRepository.save(admin);
-    }
-
-
-    @Override
-    public void deleteAdmin(Long id) {
-
-        Admin admin = adminRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Admin not found with id: " + id));
-
-        adminRepository.delete(admin);
-    }
-
+//    @Override
+//    public Admin createAdmin(AdminRequest request) {
+//
+//        Admin admin = new Admin();
+//
+//        admin.setName(request.getName());
+//        admin.setEmail(request.getEmail());
+//        admin.setPassword(request.getPassword());
+//        admin.setActive(true);
+//
+//        return adminRepository.save(admin);
+//    }
+//
+//
+//    @Override
+//    public List<Admin> getAllAdmins() {
+//        return adminRepository.findAll();
+//    }
+//
+//
+//    @Override
+//    public Admin getAdminById(Long id) {
+//
+//        return adminRepository.findById(id)
+//                .orElseThrow(() ->
+//                        new RuntimeException(
+//                                "Admin not found with id: " + id));
+//    }
+//
+//
+//    @Override
+//    public Admin updateAdmin(Long id, AdminRequest request) {
+//
+//        Admin admin = adminRepository.findById(id)
+//                .orElseThrow(() ->
+//                        new RuntimeException(
+//                                "Admin not found with id: " + id));
+//
+//        admin.setName(request.getName());
+//        admin.setEmail(request.getEmail());
+//        admin.setPassword(request.getPassword());
+//
+//        return adminRepository.save(admin);
+//    }
+//
+//
+//    @Override
+//    public void deleteAdmin(Long id) {
+//
+//        Admin admin = adminRepository.findById(id)
+//                .orElseThrow(() ->
+//                        new RuntimeException(
+//                                "Admin not found with id: " + id));
+//
+//        adminRepository.delete(admin);
+//    }
+//
 
     // ================= TRAINER =================
 
     @Override
-    public Teacher createTrainer(Teacher teacher) {
+    public Teacher createTrainer(Long adminId, Teacher teacher) {
+
+        // 1. Pehle check karein ki kaun sa Admin ise bana raha hai
+        Admin admin = adminRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("Admin not found with id: " + adminId));
+
+        // 2. Teacher (Trainer) entity me admin set karein
+        // Note: Apni Teacher entity ke according field name check kar lena (jaise createdByAdmin ya admin)
+        teacher.setCreatedByAdmin(admin);
+
         return teacherRepository.save(teacher);
+
+        //  return teacherRepository.save(teacher);
     }
 
 

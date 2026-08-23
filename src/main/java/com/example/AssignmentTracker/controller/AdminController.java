@@ -25,56 +25,56 @@ public class AdminController {
 
     // ================= ADMIN =================
 
-    @PostMapping
-    public ResponseEntity<Admin> createAdmin(
-            @Valid @RequestBody AdminRequest request) {
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(adminService.createAdmin(request));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Admin>> getAllAdmins() {
-
-        return ResponseEntity.ok(adminService.getAllAdmins());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Admin> getAdminById(
-            @PathVariable Long id) {
-
-        return ResponseEntity.ok(adminService.getAdminById(id));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Admin> updateAdmin(
-            @PathVariable Long id,
-            @Valid @RequestBody AdminRequest request) {
-
-        return ResponseEntity.ok(
-                adminService.updateAdmin(id, request));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAdmin(
-            @PathVariable Long id) {
-
-        adminService.deleteAdmin(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
+//    @PostMapping
+//    public ResponseEntity<Admin> createAdmin(
+//            @Valid @RequestBody AdminRequest request) {
+//
+//        return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(adminService.createAdmin(request));
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<Admin>> getAllAdmins() {
+//
+//        return ResponseEntity.ok(adminService.getAllAdmins());
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Admin> getAdminById(
+//            @PathVariable Long id) {
+//
+//        return ResponseEntity.ok(adminService.getAdminById(id));
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Admin> updateAdmin(
+//            @PathVariable Long id,
+//            @Valid @RequestBody AdminRequest request) {
+//
+//        return ResponseEntity.ok(
+//                adminService.updateAdmin(id, request));
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteAdmin(
+//            @PathVariable Long id) {
+//
+//        adminService.deleteAdmin(id);
+//
+//        return ResponseEntity.noContent().build();
+//    }
+//
 
     // ================= TRAINER =================
 
-    @PostMapping("/trainers")
-    public ResponseEntity<Teacher> createTrainer(
+    @PostMapping("/{a_id}/trainers")
+    public ResponseEntity<Teacher> createTrainer(  @PathVariable Long a_id,
             @RequestBody Teacher teacher) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(adminService.createTrainer(teacher));
+                .body(adminService.createTrainer(a_id,teacher));
     }
 
     @GetMapping("/trainers")

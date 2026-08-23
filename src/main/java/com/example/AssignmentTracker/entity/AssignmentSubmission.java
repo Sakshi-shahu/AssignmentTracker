@@ -37,7 +37,7 @@ public class AssignmentSubmission {
     @Enumerated(EnumType.STRING)
     private SubmissionStatus status;
 
-    private Integer marks;
+    private Double marks;
 
     private String feedback;
 }

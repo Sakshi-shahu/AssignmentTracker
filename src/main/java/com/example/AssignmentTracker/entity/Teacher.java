@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -23,8 +24,9 @@ public class Teacher {
 
     // Teacher is created by a SuperAdmin
     @ManyToOne
-    @JoinColumn(name = "super_admin_id")
-    private SuperAdmin createdBySuperAdmin;
+    @JoinColumn(name = "admin_id")
+    @JsonIgnoreProperties("teachers")
+    private Admin createdByAdmin;
 
     // Teacher has many students
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)

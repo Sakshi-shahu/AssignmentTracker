@@ -8,19 +8,19 @@ import java.util.List;
 public interface AdminService {
 
     // Admin
-    Admin createAdmin(AdminRequest request);
-
-    List<Admin> getAllAdmins();
-
-    Admin getAdminById(Long id);
-
-    Admin updateAdmin(Long id, AdminRequest request);
-
-    void deleteAdmin(Long id);
+//    Admin createAdmin(AdminRequest request);
+//
+//    List<Admin> getAllAdmins();
+//
+//    Admin getAdminById(Long id);
+//
+//    Admin updateAdmin(Long id, AdminRequest request);
+//
+//    void deleteAdmin(Long id);
 
 
     // Trainer
-    Teacher createTrainer(Teacher teacher);
+    Teacher createTrainer(Long adminId,  Teacher teacher);
 
     List<Teacher> getAllTrainers();
 

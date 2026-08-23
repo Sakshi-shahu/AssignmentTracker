@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/superadmin")
+@RequestMapping("/superadmin")
 @RequiredArgsConstructor
 public class SuperAdminController {
 
@@ -117,7 +117,7 @@ public class SuperAdminController {
     }
 
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<SuperAdmin> createSuperAdmin(
             @Valid @RequestBody SuperAdminRequest request) {
 
