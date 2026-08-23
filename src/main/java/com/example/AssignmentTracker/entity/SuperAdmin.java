@@ -40,6 +40,8 @@ public class SuperAdmin {
     private List<Admin> admins;
 
     // SuperAdmin creates Teachers
-    @OneToMany(mappedBy = "createdBySuperAdmin")
-    private List<Teacher> teachers;
+    //@OneToMany(mappedBy = "createdBySuperAdmin")
+//    @OneToMany(mappedBy = "createdByAdmin") // 👈 mappedBy property ko Teacher entity ke actual field se match karein
+//    @JsonIgnoreProperties("createdByAdmin")
+//    private List<Teacher> teachers;
 }

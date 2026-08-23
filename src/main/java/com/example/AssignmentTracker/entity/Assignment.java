@@ -29,14 +29,14 @@ public class Assignment {
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     String description;
 
-    @NotNull(message = "Assigned date is required")
+    //@NotNull(message = "Assigned date is required")
     LocalDate assignedDate;
 
     @NotNull(message = "DueDate is required")
     LocalDate dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull(message = "Teacher is required")
+    //@NotNull(message = "Teacher is required")
     @JoinColumn(name = "teacher_id")
     Teacher teacher;
 

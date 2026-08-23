@@ -35,6 +35,7 @@ public class TeacherServiceImpl implements TeacherService{
                 .orElseThrow(() -> new TeacherNotFoundException("Trainer not found with id: " + teacherId));
 
         assignment.setTeacher(teacher);
+        assignment.setAssignedDate(java.time.LocalDate.now());
         return assignmentRepository.save(assignment);
     }
 
