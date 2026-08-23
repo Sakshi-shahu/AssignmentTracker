@@ -1,8 +1,8 @@
 package com.example.AssignmentTracker.controller;
 
-import com.example.AssignmentTracker.dto.AdminRequest;
-import com.example.AssignmentTracker.dto.AssignmentStatistics;
-import com.example.AssignmentTracker.dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.AssignmentStatistics;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
 import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.service.SuperAdminService;
 import jakarta.validation.Valid;

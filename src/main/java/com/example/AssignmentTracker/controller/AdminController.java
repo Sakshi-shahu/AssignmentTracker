@@ -1,6 +1,6 @@
 package com.example.AssignmentTracker.controller;
 
-import com.example.AssignmentTracker.dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.entity.Admin;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;

@@ -1,6 +1,6 @@
 package com.example.AssignmentTracker.service;
 
-import com.example.AssignmentTracker.dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.entity.*;
 
 import java.util.List;

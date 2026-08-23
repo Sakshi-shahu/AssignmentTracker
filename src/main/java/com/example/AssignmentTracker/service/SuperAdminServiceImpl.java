@@ -1,11 +1,10 @@
 package com.example.AssignmentTracker.service;
 
-import com.example.AssignmentTracker.Exception.AssignmentNotFoundException;
-import com.example.AssignmentTracker.Exception.StudentNotFoundException;
-import com.example.AssignmentTracker.Exception.TeacherNotFoundException;
-import com.example.AssignmentTracker.dto.AdminRequest;
-import com.example.AssignmentTracker.dto.AssignmentStatistics;
-import com.example.AssignmentTracker.dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.AssignmentStatistics;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
 import com.example.AssignmentTracker.entity.Admin;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;
@@ -18,6 +17,7 @@ import com.example.AssignmentTracker.repository.StudentRepository;
 import com.example.AssignmentTracker.repository.SubmissionRepository;
 import com.example.AssignmentTracker.repository.SuperAdminRepository;
 import com.example.AssignmentTracker.repository.TeacherRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +71,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     @Override
     public Admin updateAdmin(
             Long adminId,
-            AdminRequest request) {
+            @Valid AdminRequest request) {
 
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(() ->
@@ -164,7 +164,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
 
     @Override
-    public SuperAdmin createSuperAdmin(SuperAdminRequest request) {
+    public SuperAdmin createSuperAdmin(@Valid SuperAdminRequest request) {
 
         SuperAdmin superAdmin = new SuperAdmin();
 

@@ -1,7 +1,7 @@
 package com.example.AssignmentTracker.service;
 
 import com.example.AssignmentTracker.Exception.TeacherNotFoundException;
-import com.example.AssignmentTracker.dto.TeacherResponseDto;
+import com.example.AssignmentTracker.Dto.TeacherResponseDto;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;
 import com.example.AssignmentTracker.entity.Student;

@@ -3,7 +3,7 @@ package com.example.AssignmentTracker.service;
 import com.example.AssignmentTracker.Exception.AssignmentNotFoundException;
 import com.example.AssignmentTracker.Exception.StudentNotFoundException;
 import com.example.AssignmentTracker.Exception.TeacherNotFoundException;
-import com.example.AssignmentTracker.dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -96,6 +96,7 @@ public class AdminServiceImpl implements AdminService {
         // 2. Teacher (Trainer) entity me admin set karein
         // Note: Apni Teacher entity ke according field name check kar lena (jaise createdByAdmin ya admin)
         teacher.setCreatedByAdmin(admin);
+
 
         return teacherRepository.save(teacher);
 

@@ -96,8 +96,8 @@ public class SubmissionController {
             response.setAssignmentTitle(submission.getAssignment().getTitle());
 
             Teacher teacher = submission.getAssignment().getTeacher();
-            response.setTeacherName(teacher.getTrainerName());
-            response.setSubjectTeacher(teacher.getSubjectTeacher());
+            response.setTeacherName(teacher.getName());
+            response.setSubjectTeacher(teacher.getSubject());
             response.setStatus(submission.getStatus().name());
             responseList.add(response);
         }
@@ -117,8 +117,8 @@ public class SubmissionController {
             response.setStudentName(submission.getStudent().getName());
             response.setAssignmentTitle(submission.getAssignment().getTitle());
             Teacher teacher = submission.getAssignment().getTeacher();
-            response.setTeacherName(teacher.getTrainerName());
-            response.setSubjectTeacher(teacher.getSubjectTeacher());
+            response.setTeacherName(teacher.getName());
+            response.setSubjectTeacher(teacher.getSubject());
             response.setStatus(submission.getStatus().name());
             responseList.add(response);
         }

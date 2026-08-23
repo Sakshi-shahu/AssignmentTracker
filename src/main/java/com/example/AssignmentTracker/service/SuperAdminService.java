@@ -1,9 +1,12 @@
 package com.example.AssignmentTracker.service;
 
-import com.example.AssignmentTracker.dto.AdminRequest;
-import com.example.AssignmentTracker.dto.AssignmentStatistics;
-import com.example.AssignmentTracker.dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.AssignmentStatistics;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
 import com.example.AssignmentTracker.entity.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ public interface SuperAdminService {
 
     List<Admin> getAllAdmins();
 
-    Admin updateAdmin(Long adminId, AdminRequest request);
+    Admin updateAdmin(Long adminId, @Valid AdminRequest request);
 
     void deactivateAdmin(Long adminId);
 
@@ -45,5 +48,5 @@ public interface SuperAdminService {
     AssignmentStatistics getAssignmentStatistics();
 
 
-    SuperAdmin createSuperAdmin(SuperAdminRequest request);
+    SuperAdmin createSuperAdmin(@Valid SuperAdminRequest request);
 }
