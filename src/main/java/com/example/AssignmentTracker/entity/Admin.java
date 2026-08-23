@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,5 +32,6 @@ public class Admin {
 
     @ManyToOne
     @JoinColumn(name = "super_admin_id")
+    @JsonBackReference
     private SuperAdmin createdBy;
 }

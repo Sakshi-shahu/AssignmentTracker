@@ -29,4 +29,6 @@ public class Teacher {
     // Teacher has many students
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<Student> studentList;
+
+
 }
