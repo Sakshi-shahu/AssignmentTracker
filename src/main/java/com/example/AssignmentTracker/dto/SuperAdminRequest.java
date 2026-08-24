@@ -1,4 +1,4 @@
-package com.example.AssignmentTracker.Dto;
+package com.example.AssignmentTracker.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;

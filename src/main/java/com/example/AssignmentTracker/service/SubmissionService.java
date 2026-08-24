@@ -1,6 +1,6 @@
 package com.example.AssignmentTracker.service;
 
-import com.example.AssignmentTracker.Dto.SubmissionStatusResponse;
+import com.example.AssignmentTracker.dto.SubmissionStatusResponse;
 import com.example.AssignmentTracker.Exception.*;
 import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.AssignmentRepository;

@@ -54,7 +54,7 @@ public class RateLimit extends OncePerRequestFilter {
             return;
         }
 
-        // Allow request
+
         timestamps.addLast(now);
         filterChain.doFilter(request, response);
     }

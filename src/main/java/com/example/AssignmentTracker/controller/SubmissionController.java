@@ -1,6 +1,6 @@
 package com.example.AssignmentTracker.controller;
 
-import com.example.AssignmentTracker.Dto.SubmissionStatusResponse;
+import com.example.AssignmentTracker.dto.SubmissionStatusResponse;
 import com.example.AssignmentTracker.Exception.JsonProcessingException;
 import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.AssignmentRepository;

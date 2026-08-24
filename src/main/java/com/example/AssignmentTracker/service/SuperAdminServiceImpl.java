@@ -1,10 +1,10 @@
 package com.example.AssignmentTracker.service;
 
 import com.example.AssignmentTracker.Dto.AdminRequest;
-import com.example.AssignmentTracker.Dto.SuperAdminRequest;
+import com.example.AssignmentTracker.dto.SuperAdminRequest;
 import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.Dto.AssignmentStatistics;
-import com.example.AssignmentTracker.Dto.SuperAdminRequest;
+import com.example.AssignmentTracker.dto.SuperAdminRequest;
 import com.example.AssignmentTracker.entity.Admin;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;

@@ -1,4 +1,4 @@
-package com.example.AssignmentTracker.Dto;
+package com.example.AssignmentTracker.dto;
 
 public record StudentResponseDto() {
 }

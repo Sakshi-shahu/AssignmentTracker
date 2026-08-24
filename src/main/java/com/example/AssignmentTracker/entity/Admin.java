@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "admin")
 @ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -27,9 +29,10 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
-    private boolean active = true;
+    private Boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "super_admin_id")
+    @JsonIgnoreProperties("admins")
     private SuperAdmin createdBy;
 }

@@ -20,14 +20,11 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService{
 
 
-
-
-    private final TeacherRepository teacherRepository;
-    private final AssignmentRepository assignmentRepository;
+          private final TeacherRepository teacherRepository;
+      private final AssignmentRepository assignmentRepository;
     private final StudentRepository studentRepository;
-    private final SubmissionRepository submissionRepository;
+       private final SubmissionRepository submissionRepository;
 
-    // ================= 1. ASSIGNMENT MANAGEMENT =================
 
     @Override
     public Assignment createAssignment(Long teacherId, Assignment assignment) {
@@ -41,11 +38,10 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public List<Assignment> getAssignmentsByTeacher(Long teacherId) {
-        // Validation check for teacher existence
         if (!teacherRepository.existsById(teacherId)) {
             throw new TeacherNotFoundException("Trainer not found with id: " + teacherId);
         }
-        return assignmentRepository.findByTeacherId(teacherId); // 👈 Repository method checked
+        return assignmentRepository.findByTeacherId(teacherId);
     }
 
     @Override
@@ -67,13 +63,10 @@ public class TeacherServiceImpl implements TeacherService{
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + studentId));
-
-        // Assuming student has a list of active assignments or via a mapping table
-        // 👈 FIXED LOGIC: Student list me add karne ke bajay direct link record create kiya
         AssignmentSubmission initialSubmission = new AssignmentSubmission();
         initialSubmission.setAssignment(assignment);
         initialSubmission.setStudent(student);
-        initialSubmission.setStatus(SubmissionStatus.PENDING); // Ensure PENDING exists in your SubmissionStatus enum
+        initialSubmission.setStatus(SubmissionStatus.PENDING);
         initialSubmission.setSubmissionDate(LocalDateTime.now());
         initialSubmission.setSubmissionFile("NOT_SUBMITTED_YET");
         initialSubmission.setMarks(null);
@@ -81,7 +74,7 @@ public class TeacherServiceImpl implements TeacherService{
        submissionRepository.save(initialSubmission);
     }
 
-    // ================= 2. STUDENT VIEW =================
+
 
     @Override
     public List<Student> getStudentsByTeacher(Long teacherId) {
@@ -91,27 +84,22 @@ public class TeacherServiceImpl implements TeacherService{
         return studentRepository.findByTeacherId(teacherId); // 👈 Trainer ke under assigned students list
     }
 
-    // ================= 3. SUBMISSIONS & EVALUATION =================
 
+// student submission
     @Override
     public List<AssignmentSubmission> getSubmissionsForTeacher(Long teacherId) {
-        if (!teacherRepository.existsById(teacherId)) {
-            throw new TeacherNotFoundException("Trainer not found with id: " + teacherId);
+        if (!teacherRepository.existsById(teacherId)) {throw new TeacherNotFoundException("Trainer not found with id: " + teacherId);
         }
-        // Custom query to fetch submissions of assignments belonging to this teacher
-        return submissionRepository.findByAssignment_Teacher_Id(teacherId); // 👈 Custom JPA query method
+        return submissionRepository.findByAssignment_Teacher_Id(teacherId);
     }
 
     @Override
     public AssignmentSubmission evaluateSubmission(Long submissionId, double marks, String feedback, String status) {
         AssignmentSubmission submission = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new RuntimeException("Submission not found with id: " + submissionId));
-
-        // Evaluate metrics mapping
         submission.setMarks(marks);
         submission.setFeedback(feedback);
-        submission.setStatus(SubmissionStatus.valueOf(status.toUpperCase())); // e.g., "GRADED", "REJECTED", "PASSED"
-
+        submission.setStatus(SubmissionStatus.valueOf(status.toUpperCase()));
         return submissionRepository.save(submission);
     }
 

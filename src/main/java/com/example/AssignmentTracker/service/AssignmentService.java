@@ -30,13 +30,9 @@ public class AssignmentService {
     }
 
 
-
-
     public List<Assignment> getAllAssignments() {
         return assignmentRepository.findAll();
     }
-
-
 
 
     public Assignment updateAssignment(Long id, Assignment updatedAssignment) {
