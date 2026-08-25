@@ -23,12 +23,14 @@ public class Student {
     private Long id;
 
     private String name;
-
+    @Column(nullable = false, unique = true)
     private String email;
 
-    private String phone;
-
     private String course;
+
+
+    @Column(nullable = false)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -39,24 +41,13 @@ public class Student {
 
     private LocalDateTime updatedAt;
 
-
-    // Student created by Admin
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
     private Admin createdByAdmin;
 
 
-    // Student created by Super Admin
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "super_admin_id")
-    private SuperAdmin createdBySuperAdmin;
 
 
-    // Student assigned to Teacher
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+
 }

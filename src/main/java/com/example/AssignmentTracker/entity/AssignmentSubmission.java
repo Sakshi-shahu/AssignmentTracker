@@ -2,6 +2,7 @@ package com.example.AssignmentTracker.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,16 +22,16 @@ public class AssignmentSubmission {
 
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "Assignment is required")
-    @JoinColumn(name = "assignment_id")
+    @JoinColumn(name = "assignment_id", nullable = false)
     private Assignment assignment;
 
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "Student is required")
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
     @NotNull(message = "Date is required")
@@ -42,7 +43,10 @@ public class AssignmentSubmission {
     @Enumerated(EnumType.STRING)
     private SubmissionStatus status;
 
+    @Min(0)
     private Double marks;
 
     private String feedback;
+
+    private LocalDateTime evaluatedAt;
 }

@@ -3,10 +3,7 @@ package com.example.AssignmentTracker.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.ToString;
 
@@ -39,8 +36,13 @@ public class Assignment{
     private LocalDate dueDate;
 
 
+
+    @NotNull
+    @Min(1)
+    private Integer maxMarks;
+
     @Enumerated(EnumType.STRING)
-    private SubmissionStatus status;
+    private AssignmentStatus status;
 
     private String course;
 
@@ -55,12 +57,12 @@ public class Assignment{
     @JoinColumn(name = "admin_id")
     private Admin createdBy;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "assignment_students",
-            joinColumns = @JoinColumn(name = "assignment_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private Set<Student> students;
+//    @JsonIgnore
+//    @ManyToMany
+//    @JoinTable(
+//            name = "assignment_students",
+//            joinColumns = @JoinColumn(name = "assignment_id"),
+//            inverseJoinColumns = @JoinColumn(name = "student_id")
+//    )
+//    private Set<Student> students;
 }

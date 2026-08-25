@@ -2,6 +2,8 @@ package com.example.AssignmentTracker.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +30,10 @@ public class Admin {
 
     @Column(nullable = false)
     private String password;
+
+    @NotBlank
+    @Size(min = 10, max = 10)
+    private  String phone;
 
     private Boolean active = true;
 
