@@ -2,21 +2,14 @@ package com.example.AssignmentTracker.service;
 
 import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.dto.SuperAdminRequest;
-import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.Dto.AssignmentStatistics;
-import com.example.AssignmentTracker.dto.SuperAdminRequest;
 import com.example.AssignmentTracker.entity.Admin;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.entity.SuperAdmin;
 import com.example.AssignmentTracker.entity.Teacher;
-import com.example.AssignmentTracker.repository.AdminRepository;
-import com.example.AssignmentTracker.repository.AssignmentRepository;
-import com.example.AssignmentTracker.repository.StudentRepository;
-import com.example.AssignmentTracker.repository.SubmissionRepository;
-import com.example.AssignmentTracker.repository.SuperAdminRepository;
-import com.example.AssignmentTracker.repository.TeacherRepository;
+import com.example.AssignmentTracker.repository.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +27,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
     private final AssignmentRepository assignmentRepository;
-    private final SubmissionRepository submissionRepository;
+    private final AssignmentSubmissionRepository submissionRepository;
 
 
     // ================= ADMIN =================

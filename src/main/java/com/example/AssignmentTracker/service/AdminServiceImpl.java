@@ -21,7 +21,7 @@ public class AdminServiceImpl implements AdminService {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
     private final AssignmentRepository assignmentRepository;
-    private final SubmissionRepository submissionRepository;
+    private final AssignmentSubmissionRepository submissionRepository;
 
 
     // ================= ADMIN =================
@@ -157,7 +157,6 @@ public class AdminServiceImpl implements AdminService {
                         new TeacherNotFoundException(
                                 "Teacher not found with id: " + teacherId));
 
-        student.setTeacher(teacher);
 
         return studentRepository.save(student);
     }
@@ -318,9 +317,7 @@ public class AdminServiceImpl implements AdminService {
                         new StudentNotFoundException(
                                 "Student not found with id: " + studentId));
 
-        if (!assignment.getStudents().contains(student)) {
-            assignment.getStudents().add(student);
-        }
+
 
         assignmentRepository.save(assignment);
     }

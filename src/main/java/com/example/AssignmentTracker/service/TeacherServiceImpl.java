@@ -5,8 +5,8 @@ import com.example.AssignmentTracker.Exception.StudentNotFoundException;
 import com.example.AssignmentTracker.Exception.TeacherNotFoundException;
 import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.AssignmentRepository;
+import com.example.AssignmentTracker.repository.AssignmentSubmissionRepository;
 import com.example.AssignmentTracker.repository.StudentRepository;
-import com.example.AssignmentTracker.repository.SubmissionRepository;
 import com.example.AssignmentTracker.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class TeacherServiceImpl implements TeacherService{
           private final TeacherRepository teacherRepository;
       private final AssignmentRepository assignmentRepository;
     private final StudentRepository studentRepository;
-       private final SubmissionRepository submissionRepository;
+       private final AssignmentSubmissionRepository submissionRepository;
 
 
     @Override
@@ -71,7 +71,6 @@ public class TeacherServiceImpl implements TeacherService{
         initialSubmission.setSubmissionFile("NOT_SUBMITTED_YET");
         initialSubmission.setMarks(null);
         initialSubmission.setFeedback(null);
-       submissionRepository.save(initialSubmission);
     }
 
 
@@ -81,7 +80,7 @@ public class TeacherServiceImpl implements TeacherService{
         if (!teacherRepository.existsById(teacherId)) {
             throw new TeacherNotFoundException("Trainer not found with id: " + teacherId);
         }
-        return studentRepository.findByTeacherId(teacherId); // 👈 Trainer ke under assigned students list
+        return  null;
     }
 
 
@@ -90,7 +89,7 @@ public class TeacherServiceImpl implements TeacherService{
     public List<AssignmentSubmission> getSubmissionsForTeacher(Long teacherId) {
         if (!teacherRepository.existsById(teacherId)) {throw new TeacherNotFoundException("Trainer not found with id: " + teacherId);
         }
-        return submissionRepository.findByAssignment_Teacher_Id(teacherId);
+        return null;
     }
 
     @Override
