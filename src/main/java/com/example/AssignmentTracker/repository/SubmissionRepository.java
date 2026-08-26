@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface SubmissionRepository extends JpaRepository<AssignmentSubmission,Long> {
-    List<AssignmentSubmission> findByAssignment_Teacher_Id(Long teacherId);
+    List<AssignmentSubmission> findByAssignmentTeacherId(Long teacherId);// now used by kashish
 
 
 
@@ -17,5 +17,10 @@ public interface SubmissionRepository extends JpaRepository<AssignmentSubmission
     Optional<AssignmentSubmission> findByAssignment_IdAndStudent_Id(Long assignmentId, Long studentId);
 
     List<AssignmentSubmission> findByStudentId(Long studentId);
+
+
+
+    List<AssignmentSubmission>
+    findByAssignmentId(Long assignmentId); // use by kashish
 
 }

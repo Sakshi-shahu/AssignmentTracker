@@ -1,9 +1,13 @@
 package com.example.AssignmentTracker.controller;
 
 
+import com.example.AssignmentTracker.dto.*;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;
 import com.example.AssignmentTracker.entity.Student;
+import com.example.AssignmentTracker.service.AssignmentService;
+import com.example.AssignmentTracker.service.AssignmentStudentService;
+import com.example.AssignmentTracker.service.SubmissionService;
 import com.example.AssignmentTracker.service.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,64 +19,246 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/t")
+@RequestMapping("/teacher")
 @RequiredArgsConstructor
 public class TeacherController {
 
 
     private  final TeacherService teacherService;
 
+    private final AssignmentService assignmentService;
+
+    private final AssignmentStudentService assignmentStudentService;
+
+    private final SubmissionService submissionService;
+
+//Create assignment
     @PostMapping("/{teacherId}/assignments")
-    public ResponseEntity<Assignment> createAssignment(
+    public ResponseEntity<AssignmentResponseDto>
+    createAssignment(
+
             @PathVariable Long teacherId,
-             @RequestBody Assignment assignment) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(teacherService.createAssignment(teacherId, assignment));
+
+            @Valid
+            @RequestBody AssignmentRequestDto request
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        assignmentService.createAssignment(
+                                request,
+                                teacherId
+                        )
+                );
     }
 
 
+//Get Teacher's assignments
     @GetMapping("/{teacherId}/assignments")
-    public ResponseEntity<List<Assignment>> getAssignmentsByTeacher(@PathVariable Long teacherId) {
-        return ResponseEntity.ok(teacherService.getAssignmentsByTeacher(teacherId));
+    public ResponseEntity<List<AssignmentResponseDto>>
+    getTeacherAssignments(
+            @PathVariable Long teacherId
+    ) {
+
+        return ResponseEntity.ok(
+                assignmentService
+                        .getTeacherAssignments(teacherId)
+        );
     }
 
 
-    @PutMapping("/assignments/{assignmentId}")
-    public ResponseEntity<Assignment> updateAssignment(
+
+//Get single assignment
+
+    @GetMapping("/assignments/{assignmentId}")
+    public ResponseEntity<AssignmentResponseDto>
+    getAssignment(
+            @PathVariable Long assignmentId
+    ) {
+
+        return ResponseEntity.ok(
+                assignmentService
+                        .getAssignment(assignmentId)
+        );
+    }
+
+
+
+    //update assignment
+
+    @PutMapping("/{teacherId}/assignments/{assignmentId}")
+    public ResponseEntity<AssignmentResponseDto>
+    updateAssignment(
+
+            @PathVariable Long teacherId,
+
             @PathVariable Long assignmentId,
-            @Valid @RequestBody Assignment assignment) {
-        return ResponseEntity.ok(teacherService.updateAssignment(assignmentId, assignment));
+
+            @Valid
+            @RequestBody AssignmentRequestDto request
+    ) {
+
+        return ResponseEntity.ok(
+                assignmentService.updateAssignment(
+                        assignmentId,
+                        request,
+                        teacherId
+                )
+        );
     }
 
 
-    @PostMapping("/assignments/{assignmentId}/students/{studentId}")
-    public ResponseEntity<Void> assignAssignmentToStudent(@PathVariable Long assignmentId, @PathVariable Long studentId) {
-        teacherService.assignAssignmentToStudent(assignmentId, studentId);
-        return ResponseEntity.ok().build();
+    // delete assignment
+
+
+    @DeleteMapping("/{teacherId}/assignments/{assignmentId}")
+    public ResponseEntity<Void>
+    deleteAssignment(
+
+            @PathVariable Long teacherId,
+
+            @PathVariable Long assignmentId
+    ) {
+
+        assignmentService.deleteAssignment(
+                assignmentId,
+                teacherId
+        );
+
+        return ResponseEntity.noContent().build();
+    }
+
+//Assign students
+
+    @PostMapping("/{teacherId}/assignments/{assignmentId}/students")
+    public ResponseEntity<List<AssignmentStudentResponseDto>>
+    assignStudents(
+
+            @PathVariable Long teacherId,
+
+            @PathVariable Long assignmentId,
+
+            @Valid
+            @RequestBody AssignmentStudentRequestDto request
+    ) {
+
+        return ResponseEntity.ok(
+                assignmentStudentService.assignStudents(
+                        assignmentId,
+                        request.getStudentIds(),
+                        teacherId
+                )
+        );
     }
 
 
 
+//24. View assigned students
 
-    // Requirement: View students (under this trainer)
-    @GetMapping("/{teacherId}/students")
-    public ResponseEntity<List<Student>> getStudentsByTeacher(@PathVariable Long teacherId) {
-        return ResponseEntity.ok(teacherService.getStudentsByTeacher(teacherId));
+
+
+    @GetMapping("/{teacherId}/assignments/{assignmentId}/students")
+    public ResponseEntity<List<AssignmentStudentResponseDto>>
+    getAssignedStudents(
+
+            @PathVariable Long teacherId,
+
+            @PathVariable Long assignmentId
+    ) {
+
+        return ResponseEntity.ok(
+                assignmentStudentService
+                        .getAssignedStudents(
+                                assignmentId,
+                                teacherId
+                        )
+        );
+    }
+
+//  Remove student from assignment
+    @DeleteMapping("/{teacherId}/assignment-students/{assignmentStudentId}")
+    public ResponseEntity<Void>
+    removeStudent(
+
+            @PathVariable Long teacherId,
+
+            @PathVariable Long assignmentStudentId
+    ) {
+
+        assignmentStudentService.removeStudent(
+                assignmentStudentId,
+                teacherId
+        );
+
+        return ResponseEntity.noContent().build();
     }
 
 
 
+// 26. Teacher submissions
 
     @GetMapping("/{teacherId}/submissions")
-    public ResponseEntity<List<AssignmentSubmission>> getSubmissionsForTeacher(@PathVariable Long teacherId) {
-        return ResponseEntity.ok(teacherService.getSubmissionsForTeacher(teacherId));
+    public ResponseEntity<List<SubmissionResponseDto>>
+    getTeacherSubmissions(
+            @PathVariable Long teacherId
+    ) {
+
+        return ResponseEntity.ok(
+                submissionService
+                        .getTeacherSubmissions(teacherId)
+        );
     }
 
 
-    @PutMapping("/submissions/{submissionId}/evaluate")
-    public ResponseEntity<AssignmentSubmission> evaluateSubmission(@PathVariable Long submissionId, @RequestParam double marks, @RequestParam String feedback,
-            @RequestParam String status) {
-        return ResponseEntity.ok(teacherService.evaluateSubmission(submissionId, marks, feedback, status));
+//27. Get single submission
+
+    @GetMapping("/{teacherId}/submissions/{submissionId}")
+    public ResponseEntity<SubmissionResponseDto>
+    getSubmission(
+
+            @PathVariable Long teacherId,
+
+            @PathVariable Long submissionId
+    ) {
+
+        return ResponseEntity.ok(
+                submissionService.getSubmission(
+                        submissionId,
+                        teacherId
+                )
+        );
     }
+
+
+//28. Evaluate submission
+@PutMapping("/{teacherId}/submissions/{submissionId}/evaluate")
+public ResponseEntity<SubmissionResponseDto>
+evaluateSubmission(
+
+        @PathVariable Long teacherId,
+
+        @PathVariable Long submissionId,
+
+        @Valid
+        @RequestBody
+        EvaluateSubmissionRequestDto request
+) {
+
+    return ResponseEntity.ok(
+            submissionService.evaluateSubmission(
+                    submissionId,
+                    request,
+                    teacherId
+            )
+    );
+}
+
+
+
+
+
+
+
 
 }
