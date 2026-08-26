@@ -22,7 +22,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse addStudent(StudentRequest request) {
-        // Check if email already exists
         if (studentRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new DuplicateResourceException("Email already exists");
         }
@@ -39,6 +38,12 @@ public class StudentServiceImpl implements StudentService {
     public Student updateStudent(Long id, StudentRequest request) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+
+        if (student.getEmail().equals(request.getEmail())) {
+            throw new DuplicateResourceException(
+                    "New email must be different from previous email"
+            );
+        }
 
         if (studentRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new DuplicateResourceException("Email already exists");

@@ -1,7 +1,8 @@
-package com.example.AssignmentTracker.service.impl;
+package com.example.AssignmentTracker.service;
 
-import com.example.AssignmentTracker.Dto.AssignmentSubmissionRequest;
 import com.example.AssignmentTracker.Dto.AssignmentSubmissionResponse;
+import com.example.AssignmentTracker.Exception.FileRequiredException;
+import com.example.AssignmentTracker.Exception.SubmissionDeadlineException;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;
 import com.example.AssignmentTracker.entity.Student;
@@ -12,9 +13,17 @@ import com.example.AssignmentTracker.repository.AssignmentSubmissionRepository;
 import com.example.AssignmentTracker.repository.StudentRepository;
 import com.example.AssignmentTracker.service.AssignmentSubmissionService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,27 +34,67 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
     private final AssignmentSubmissionRepository submissionRepository;
     private final AssignmentRepository assignmentRepository;
     private final StudentRepository studentRepository;
-
+    private final ModelMapper modelMapper;
+    private final IdempotencyService idempotencyService;
     @Override
-    public AssignmentSubmissionResponse submitAssignment(Long studentId, Long assignmentId, AssignmentSubmissionRequest request) {
+    public AssignmentSubmissionResponse submitAssignmentFile(Long studentId, Long assignmentId, MultipartFile file, String idempotencyKey) {
+        if (idempotencyService.isProceed(idempotencyKey)) {
+            Long submissionId = idempotencyService.get(idempotencyKey);
+            AssignmentSubmission existing = submissionRepository.findById(submissionId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));
+            return modelMapper.map(existing, AssignmentSubmissionResponse.class);
+        }
+
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
         Assignment assignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment not found"));
 
-        AssignmentSubmission submission = new AssignmentSubmission();
-        submission.setStudent(student);
-        submission.setAssignment(assignment);
-        submission.setSubmissionDate(LocalDateTime.now());
-        submission.setSubmissionFile(request.getSubmissionFile());
-        submission.setStatus(SubmissionStatus.SUBMITTED);
+        if (file == null || file.isEmpty()) {
+            throw new FileRequiredException("Please upload a file");
+        }
 
-        submissionRepository.save(submission);
-        return mapToResponse(submission);
+        LocalDateTime currentTime = LocalDateTime.now();
+        if (assignment.getDueDate() != null && currentTime.toLocalDate().isAfter(assignment.getDueDate())) {
+            throw new SubmissionDeadlineException("Cannot submit after due date");
+        }
+
+        try {
+            String uploadDirectory = "uploads/";
+            Path directory = Paths.get(uploadDirectory);
+            if (!Files.exists(directory)) {
+                Files.createDirectories(directory);
+            }
+
+            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = directory.resolve(filename);
+            Files.write(filePath, file.getBytes());
+
+            AssignmentSubmission submission = new AssignmentSubmission();
+            submission.setStudent(student);
+            submission.setAssignment(assignment);
+            submission.setSubmissionDate(currentTime);
+            submission.setSubmissionFile(filePath.toString());
+            submission.setStatus(SubmissionStatus.SUBMITTED);
+
+            submissionRepository.save(submission);
+            idempotencyService.put(idempotencyKey, submission.getId());
+            return modelMapper.map(submission, AssignmentSubmissionResponse.class);
+
+        } catch (IOException e) {
+            throw new RuntimeException("File upload failed: " + e.getMessage());
+        }
     }
-
     @Override
-    public AssignmentSubmissionResponse updateSubmission(Long studentId, Long assignmentId, AssignmentSubmissionRequest request) {
+    public AssignmentSubmissionResponse updateSubmissionFile(Long studentId, Long assignmentId, MultipartFile file, String idempotencyKey) {
+
+        if (idempotencyService.isProceed(idempotencyKey)) {
+            Long submissionId = idempotencyService.get(idempotencyKey);
+            AssignmentSubmission existing = submissionRepository.findById(submissionId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));
+            return modelMapper.map(existing, AssignmentSubmissionResponse.class);
+        }
+
         AssignmentSubmission submission = submissionRepository.findByStudentIdAndAssignmentId(studentId, assignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));
 
@@ -53,39 +102,59 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
             throw new RuntimeException("Submission cannot be updated after evaluation");
         }
 
-        submission.setSubmissionFile(request.getSubmissionFile());
-        submission.setSubmissionDate(LocalDateTime.now());
-        submissionRepository.save(submission);
+        if (file == null || file.isEmpty()) {
+            throw new FileRequiredException("Please upload a file");
+        }
 
-        return mapToResponse(submission);
+        Assignment assignment = submission.getAssignment();
+        LocalDateTime currentTime = LocalDateTime.now();
+        if (assignment.getDueDate() != null && currentTime.toLocalDate().isAfter(assignment.getDueDate())) {
+            throw new SubmissionDeadlineException("Cannot update submission after due date");
+        }
+
+        try {
+            String uploadDirectory = "uploads/";
+            Path directory = Paths.get(uploadDirectory);
+            if (!Files.exists(directory)) {
+                Files.createDirectories(directory);
+            }
+
+            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = directory.resolve(filename);
+            Files.write(filePath, file.getBytes());
+
+            submission.setSubmissionFile(filePath.toString());
+            submission.setSubmissionDate(currentTime);
+            submission.setStatus(SubmissionStatus.SUBMITTED);
+
+            submissionRepository.save(submission);
+
+            idempotencyService.put(idempotencyKey, submission.getId());
+
+            return modelMapper.map(submission, AssignmentSubmissionResponse.class);
+
+        } catch (IOException e) {
+            throw new RuntimeException("File upload failed: " + e.getMessage());
+        }
     }
+
 
     @Override
     public List<AssignmentSubmissionResponse> getStudentSubmissions(Long studentId) {
-        return submissionRepository.findByStudentId(studentId)
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        List<AssignmentSubmission> submissions = submissionRepository.findByStudentId(studentId);
+        List<AssignmentSubmissionResponse> responses = new ArrayList<>();
+
+        for (AssignmentSubmission submission : submissions) {
+            AssignmentSubmissionResponse response = modelMapper.map(submission, AssignmentSubmissionResponse.class);
+            responses.add(response);
+        }
+        return responses;
     }
 
     @Override
     public AssignmentSubmissionResponse getSubmission(Long studentId, Long assignmentId) {
         AssignmentSubmission submission = submissionRepository.findByStudentIdAndAssignmentId(studentId, assignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));
-        return mapToResponse(submission);
-    }
-
-    private AssignmentSubmissionResponse mapToResponse(AssignmentSubmission submission) {
-        AssignmentSubmissionResponse response = new AssignmentSubmissionResponse();
-        response.setId(submission.getId());
-        response.setAssignmentId(submission.getAssignment().getId());
-        response.setStudentId(submission.getStudent().getId());
-        response.setSubmissionDate(submission.getSubmissionDate());
-        response.setSubmissionFile(submission.getSubmissionFile());
-        response.setStatus(submission.getStatus().name());
-        response.setMarks(submission.getMarks());
-        response.setFeedback(submission.getFeedback());
-        response.setEvaluatedAt(submission.getEvaluatedAt());
-        return response;
+        return modelMapper.map(submission, AssignmentSubmissionResponse.class);
     }
 }
