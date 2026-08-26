@@ -1,6 +1,8 @@
 package com.example.AssignmentTracker.controller;
 
 import com.example.AssignmentTracker.Dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.StudentRequest;
+import com.example.AssignmentTracker.Dto.StudentResponse;
 import com.example.AssignmentTracker.entity.Admin;
 import com.example.AssignmentTracker.entity.Assignment;
 import com.example.AssignmentTracker.entity.AssignmentSubmission;
@@ -113,14 +115,12 @@ public class AdminController {
 
     // ================= STUDENT =================
 
-    @PostMapping("/students/{teacherId}")
-    public ResponseEntity<Student> createStudent(
-            @PathVariable Long teacherId,
-            @RequestBody Student student) {
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(adminService.createStudent(student, teacherId));
+    @PostMapping("/add/{adminId}")
+    public ResponseEntity<StudentResponse> addStudent(
+            @Valid @RequestBody StudentRequest request,
+            @PathVariable Long adminId) {
+        StudentResponse response = adminService.createStudent(request, adminId);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/students")

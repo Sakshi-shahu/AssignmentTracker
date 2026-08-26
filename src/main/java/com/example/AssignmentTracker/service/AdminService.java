@@ -1,6 +1,8 @@
 package com.example.AssignmentTracker.service;
 
 import com.example.AssignmentTracker.Dto.AdminRequest;
+import com.example.AssignmentTracker.Dto.StudentRequest;
+import com.example.AssignmentTracker.Dto.StudentResponse;
 import com.example.AssignmentTracker.entity.*;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public interface AdminService {
 
 
     // Student
-    Student createStudent(Student student, Long teacherId);
+    StudentResponse createStudent(StudentRequest request, Long adminId);
 
     List<Student> getAllStudents();
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface StudentService {
 
-    Student addStudent(StudentRequest request);
+    StudentResponse addStudent(StudentRequest request);
 
     Student updateStudent(Long id, StudentRequest request);
 

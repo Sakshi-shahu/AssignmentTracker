@@ -1,15 +1,17 @@
 package com.example.AssignmentTracker.service;
 
-import com.example.AssignmentTracker.Exception.AssignmentNotFoundException;
-import com.example.AssignmentTracker.Exception.StudentNotFoundException;
-import com.example.AssignmentTracker.Exception.TeacherNotFoundException;
+import com.example.AssignmentTracker.Dto.StudentRequest;
+import com.example.AssignmentTracker.Dto.StudentResponse;
+import com.example.AssignmentTracker.Exception.*;
 import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,6 +24,7 @@ public class AdminServiceImpl implements AdminService {
     private final StudentRepository studentRepository;
     private final AssignmentRepository assignmentRepository;
     private final AssignmentSubmissionRepository submissionRepository;
+    private  final ModelMapper modelMapper;
 
 
     // ================= ADMIN =================
@@ -146,21 +149,30 @@ public class AdminServiceImpl implements AdminService {
         teacherRepository.delete(teacher);
     }
 
-
     // ================= STUDENT =================
 
     @Override
-    public Student createStudent(Student student, Long teacherId) {
+    public StudentResponse createStudent(StudentRequest request, Long adminId) {
 
-        Teacher teacher = teacherRepository.findById(teacherId)
+        if (studentRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new DuplicateResourceException("Email already exists");
+        }
+
+        Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(() ->
-                        new TeacherNotFoundException(
-                                "Teacher not found with id: " + teacherId));
+                        new AdminNotFoundException(
+                                "Admin not found with id: " + adminId));
 
+        Student student = modelMapper.map(request, Student.class);
 
-        return studentRepository.save(student);
+        student.setCreatedAt(LocalDateTime.now());
+        student.setRole(Role.STUDENT);
+        student.setCreatedByAdmin(admin);
+
+        Student savedStudent = studentRepository.save(student);
+
+        return modelMapper.map(savedStudent, StudentResponse.class);
     }
-
 
     @Override
     public List<Student> getAllStudents() {

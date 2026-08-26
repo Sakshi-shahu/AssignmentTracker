@@ -1,10 +1,11 @@
 package com.example.AssignmentTracker.service;
 
 import com.example.AssignmentTracker.Dto.AdminRequest;
-import com.example.AssignmentTracker.dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
 import com.example.AssignmentTracker.Dto.AdminRequest;
 import com.example.AssignmentTracker.Dto.AssignmentStatistics;
-import com.example.AssignmentTracker.dto.SuperAdminRequest;
+import com.example.AssignmentTracker.Dto.SuperAdminRequest;
 import com.example.AssignmentTracker.entity.*;
 import jakarta.validation.Valid;
 
@@ -46,6 +47,7 @@ public interface SuperAdminService {
     // ================= STATISTICS =================
 
     AssignmentStatistics getAssignmentStatistics();
+
 
 
     SuperAdmin createSuperAdmin(@Valid SuperAdminRequest request);

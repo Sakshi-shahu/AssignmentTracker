@@ -8,5 +8,5 @@ public class StudentResponse {
     private String name;
     private String email;
     private String course;
-    private boolean active;
+    //private boolean active;
 }

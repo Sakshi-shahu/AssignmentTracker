@@ -4,7 +4,9 @@ import com.example.AssignmentTracker.Dto.StudentRequest;
 import com.example.AssignmentTracker.Dto.StudentResponse;
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +17,10 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody StudentRequest request) {
-        return ResponseEntity.ok(studentService.addStudent(request));
+    @PostMapping("/add")
+    public ResponseEntity<StudentResponse> addStudent(@Valid @RequestBody StudentRequest request) {
+        StudentResponse response = studentService.addStudent(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

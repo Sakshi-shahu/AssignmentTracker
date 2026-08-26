@@ -1,5 +1,6 @@
 package com.example.AssignmentTracker.aspect;
 
+import com.example.AssignmentTracker.Dto.StudentResponse;
 import com.example.AssignmentTracker.entity.AuditLog;
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.repository.AuditLogRepository;
@@ -21,7 +22,7 @@ public class StudentAuditAspect {
 
     @AfterReturning(pointcut = "execution(* com.example.AssignmentTracker.service.StudentService.addStudent(..))", returning = "result")
     public void afterAddStudent(Object result) {
-        Student student = (Student) result;
+        StudentResponse student = (StudentResponse) result;
         log.info("Student created successfully. ID: {}", student.getId());
         saveAudit("CREATE", "Student", student.getId(), "SUCCESS", "Student created successfully");
     }
