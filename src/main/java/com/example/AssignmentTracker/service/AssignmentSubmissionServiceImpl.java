@@ -42,8 +42,16 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
             Long submissionId = idempotencyService.get(idempotencyKey);
             AssignmentSubmission existing = submissionRepository.findById(submissionId)
                     .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));
-            return modelMapper.map(existing, AssignmentSubmissionResponse.class);
+
+            AssignmentSubmissionResponse response = modelMapper.map(existing, AssignmentSubmissionResponse.class);
+            response.setStatus("ALREADY_PROCESSED"); // or add a custom field like response.setMessage("Request already processed");
+            return response;
+
+
+
         }
+
+
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
@@ -92,8 +100,10 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
             Long submissionId = idempotencyService.get(idempotencyKey);
             AssignmentSubmission existing = submissionRepository.findById(submissionId)
                     .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));
-            return modelMapper.map(existing, AssignmentSubmissionResponse.class);
-        }
+
+            AssignmentSubmissionResponse response = modelMapper.map(existing, AssignmentSubmissionResponse.class);
+            response.setStatus("ALREADY_PROCESSED"); // or add a custom field like response.setMessage("Request already processed");
+            return response;        }
 
         AssignmentSubmission submission = submissionRepository.findByStudentIdAndAssignmentId(studentId, assignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));

@@ -11,13 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/students/{studentId}/assignments/{assignmentId}")
+@RequestMapping("/api/studentss")
 @RequiredArgsConstructor
 public class AssignmentSubmissionController {
 
     private final AssignmentSubmissionService submissionService;
 
-    @PostMapping(value = "/submissions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{studentId}/assignments/{assignmentId}/submission"
+            , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AssignmentSubmissionResponse> submitAssignment(
             @PathVariable Long studentId,
             @PathVariable Long assignmentId,
@@ -26,7 +27,8 @@ public class AssignmentSubmissionController {
         return ResponseEntity.ok(submissionService.submitAssignmentFile(studentId, assignmentId, file, idempotencyKey));
     }
 
-    @PutMapping(value = "/submission", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{studentId}/assignments/{assignmentId}/submission",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AssignmentSubmissionResponse> updateSubmission(
             @PathVariable Long studentId,
             @PathVariable Long assignmentId,
@@ -36,16 +38,22 @@ public class AssignmentSubmissionController {
     }
 
 
-    @GetMapping("/submission")
+    @GetMapping("/{studentId}/assignments")
+    public ResponseEntity<List<AssignmentSubmissionResponse>> getStudentSubmissions(
+            @PathVariable Long studentId) {
+        return ResponseEntity.ok(submissionService.getStudentSubmissions(studentId));
+    }
+
+
+    @GetMapping("/{studentId}/assignments/{assignmentId}")
     public ResponseEntity<AssignmentSubmissionResponse> getSubmission(
             @PathVariable Long studentId,
             @PathVariable Long assignmentId) {
         return ResponseEntity.ok(submissionService.getSubmission(studentId, assignmentId));
     }
 
-    @GetMapping("/submissions")
-    public ResponseEntity<List<AssignmentSubmissionResponse>> getStudentSubmissions(
-            @PathVariable Long studentId) {
-        return ResponseEntity.ok(submissionService.getStudentSubmissions(studentId));
-    }
+
+
+
+
 }
