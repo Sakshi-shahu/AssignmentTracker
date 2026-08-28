@@ -11,7 +11,6 @@ import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.repository.AssignmentRepository;
 import com.example.AssignmentTracker.repository.AssignmentStudentRepository;
 import com.example.AssignmentTracker.repository.StudentRepository;
-import com.example.AssignmentTracker.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

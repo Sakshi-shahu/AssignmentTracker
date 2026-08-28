@@ -1,4 +1,4 @@
-package com.example.AssignmentTracker.Dto;
+package com.example.AssignmentTracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

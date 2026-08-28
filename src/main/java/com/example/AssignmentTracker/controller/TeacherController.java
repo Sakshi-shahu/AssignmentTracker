@@ -2,9 +2,6 @@ package com.example.AssignmentTracker.controller;
 
 
 import com.example.AssignmentTracker.dto.*;
-import com.example.AssignmentTracker.entity.Assignment;
-import com.example.AssignmentTracker.entity.AssignmentSubmission;
-import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.service.AssignmentService;
 import com.example.AssignmentTracker.service.AssignmentStudentService;
 import com.example.AssignmentTracker.service.SubmissionService;

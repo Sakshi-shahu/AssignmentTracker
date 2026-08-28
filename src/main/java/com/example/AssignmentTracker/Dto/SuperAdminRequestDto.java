@@ -1,6 +1,5 @@
 package com.example.AssignmentTracker.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SuperAdminRequest {
+public class SuperAdminRequestDto {
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -23,4 +22,9 @@ public class SuperAdminRequest {
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
+
+    @NotBlank
+    @Size(min = 10, max = 10)
+    private String phone;
+
 }

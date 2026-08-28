@@ -57,12 +57,5 @@ public class Assignment{
     @JoinColumn(name = "admin_id")
     private Admin createdBy;
 
-//    @JsonIgnore
-//    @ManyToMany
-//    @JoinTable(
-//            name = "assignment_students",
-//            joinColumns = @JoinColumn(name = "assignment_id"),
-//            inverseJoinColumns = @JoinColumn(name = "student_id")
-//    )
-//    private Set<Student> students;
+
 }
