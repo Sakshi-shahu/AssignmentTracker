@@ -15,9 +15,9 @@ public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private   Long id;
-  @NotBlank(message = "name cannot be blank")
- private    String name;
+    private   Long id;
+   @NotBlank(message = "name cannot be blank")
+   private    String name;
     @Column(nullable = false, unique = true)
     @Email(message = "enter proper email ")
     private String email;

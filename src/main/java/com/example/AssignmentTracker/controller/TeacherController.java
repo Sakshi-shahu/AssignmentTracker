@@ -5,7 +5,6 @@ import com.example.AssignmentTracker.dto.*;
 import com.example.AssignmentTracker.service.AssignmentService;
 import com.example.AssignmentTracker.service.AssignmentStudentService;
 import com.example.AssignmentTracker.service.SubmissionService;
-import com.example.AssignmentTracker.service.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ import java.util.List;
 public class TeacherController {
 
 
-    private  final TeacherService teacherService;
+   // private  final TeacherService teacherService;
 
     private final AssignmentService assignmentService;
 
@@ -250,12 +249,6 @@ evaluateSubmission(
             )
     );
 }
-
-
-
-
-
-
 
 
 }
