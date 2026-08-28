@@ -1,16 +1,25 @@
 package com.example.AssignmentTracker.service;
 
+import com.example.AssignmentTracker.Dto.LoginDto;
+import com.example.AssignmentTracker.Dto.ResponseLogin;
 import com.example.AssignmentTracker.Dto.StudentRequest;
 import com.example.AssignmentTracker.Dto.StudentResponse;
 import com.example.AssignmentTracker.Exception.DuplicateResourceException;
+import com.example.AssignmentTracker.customjwt.JwtService;
 import com.example.AssignmentTracker.entity.Role;
 import com.example.AssignmentTracker.entity.Student;
 import com.example.AssignmentTracker.Exception.ResourceNotFoundException;
 import com.example.AssignmentTracker.repository.StudentRepository;
-import com.example.AssignmentTracker.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +28,8 @@ import java.time.LocalDateTime;
 public class StudentServiceImpl implements StudentService {
     private final ModelMapper modelMapper;
     private final StudentRepository studentRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public StudentResponse addStudent(StudentRequest request) {
@@ -74,5 +85,24 @@ public class StudentServiceImpl implements StudentService {
         response.setEmail(student.getEmail());
         response.setCourse(student.getCourse());
         return response;
+    }
+
+
+
+
+    public ResponseLogin login(@NonNull LoginDto loginDto) {
+        try {
+            authenticationManager.authenticate(UsernamePasswordAuthenticationToken
+                    .unauthenticated(loginDto.getEmail(), loginDto.getPassword()));
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username password");
+
+        }
+        Student user=studentRepository.findByEmail(loginDto.getEmail()).orElseThrow(()->
+                new UsernameNotFoundException("username not found"));
+        ResponseLogin responseDto = modelMapper.map(user, ResponseLogin.class);
+        responseDto.setToken(jwtService.generateToken(user.getEmail(), user.getPassword()));
+        return responseDto;
+
     }
 }

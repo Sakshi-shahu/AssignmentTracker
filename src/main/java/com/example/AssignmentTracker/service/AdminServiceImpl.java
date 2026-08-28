@@ -8,6 +8,7 @@ import com.example.AssignmentTracker.entity.*;
 import com.example.AssignmentTracker.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,8 @@ public class AdminServiceImpl implements AdminService {
     private final AssignmentRepository assignmentRepository;
     private final AssignmentSubmissionRepository submissionRepository;
     private  final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
+
 
 
     // ================= ADMIN =================
@@ -164,6 +167,7 @@ public class AdminServiceImpl implements AdminService {
                                 "Admin not found with id: " + adminId));
 
         Student student = modelMapper.map(request, Student.class);
+        student.setPassword(passwordEncoder.encode(request.getPassword()));
 
         student.setCreatedAt(LocalDateTime.now());
         student.setRole(Role.STUDENT);
